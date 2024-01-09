@@ -1,7 +1,8 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_pydantic_spec import FlaskPydanticSpec, Response, Request
 from pydantic import BaseModel
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
+
 
 server = Flask(__name__)
 spec = FlaskPydanticSpec('Flask', title='API PYTHON')
@@ -14,10 +15,9 @@ class Pessoa(BaseModel):
     idade: int
 
 @server.get('/pessoas')
-@spec.validate(resp=Response(HTTP_200=Pessoa))
 def buscar_pessoa():
     """ Busca todas pessoas no banco de dados"""
-    return Pessoa
+    return jsonify(database.all())
 
 @server.post('/pessoas')
 @spec.validate(body=Request(Pessoa), resp=Response(HTTP_200=Pessoa))
