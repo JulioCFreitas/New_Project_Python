@@ -23,7 +23,7 @@ class Pessoas(BaseModel):
 @server.get('/pessoas')
 @spec.validate(resp=Response(HTTP_200=Pessoas))
 def buscar_pessoas():
-    """ Busca todas pessoas no banco de dados"""
+    """ Buscar lista pessoa no DB"""
     return jsonify(
         Pessoas(
             pessoas=database.all(),
@@ -35,19 +35,18 @@ def buscar_pessoas():
 @server.post('/pessoas')
 @spec.validate(body=Request(Pessoa), resp=Response(HTTP_200=Pessoa))
 def inserir_pessoa():
-    """ Insere uma pessoa no banco de dados"""
+    """Inserir pessoa no DB"""
     body = request.context.body.dict()
     database.insert(body)
     return body 
  
 #Metodo PUT
-@server.put('/pessoas?<int:id>')
+@server.put('/pessoas/<int:id>')
 @spec.validate(body=Request(Pessoa), resp=Response(HTTP_200=Pessoa))
 def editar_pessoa(id):
-    """" Editar uma pessoa no banco de dados"""
+    """Editar pessoa no DB"""
     Pessoa = Query()
-
-    body= request.context.body.dict()
+    body = request.context.body.dict()
     database.update(body, Pessoa.id == id)
     return jsonify(body)
 
