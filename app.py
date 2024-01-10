@@ -50,4 +50,13 @@ def editar_pessoa(id):
     database.update(body, Pessoa.id == id)
     return jsonify(body)
 
+#Metodo DELET
+@server.delete('/pessoas/<int:id>')
+@spec.validate(resp=Response('HTTP_204'))
+def deletar_pessoa(id):
+    """Deletar pessoa no DB"""
+    Pessoa = Query()
+    database.remove(Pessoa.id == id)
+    return jsonify({})
+
 server.run()
